@@ -652,8 +652,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
     margin-top: 2rem;
     align-items: start;
 }
@@ -698,16 +698,23 @@ h1, h2, h3, h4, h5, h6 {
 .gallery-item img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Show the entire design without cropping */
+    object-fit: cover; /* Fill the container while maintaining aspect ratio */
+    object-position: center;
     background-color: var(--white);
     display: block;
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     filter: brightness(1) saturate(1);
+    transform: scale(var(--img-scale, 1));
 }
 
 .gallery-item:hover img {
-    transform: scale(1.02);
+    transform: scale(calc(var(--img-scale, 1) * 1.02));
     filter: brightness(1.03) saturate(1.05);
+}
+
+/* Slightly zoom new JPEGs to crop built-in whitespace and fill tiles better */
+.gallery-item img[src^="new images/"] {
+    --img-scale: 1.18;
 }
 
 .gallery-overlay {
@@ -1670,7 +1677,13 @@ a:focus {
 @media (max-width: 768px) {
     .gallery-grid {
         grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
+        gap: 12px;
+        padding: 0 1rem;
+    }
+    
+    .gallery-item {
+        border-radius: 15px;
+        min-height: 200px;
     }
 }
 
